@@ -42,20 +42,28 @@
 
         </p>
 
-        <form>
+        <form
+    name="suscriptores"
+    method="POST"
+    data-netlify="true"
+    action="/gracias.html">
 
-            <input
-                type="email"
-                placeholder="Escribe tu correo electrónico"
-                required>
+    <input
+        type="hidden"
+        name="form-name"
+        value="suscriptores">
 
-            <button>
+    <input
+        type="email"
+        name="email"
+        placeholder="Escribe tu correo electrónico"
+        required>
 
-                🚀 Quiero mi guía gratuita
+    <button type="submit">
+        🚀 Quiero mi guía gratuita
+    </button>
 
-            </button>
-
-        </form>
+    </form>
 
         <div class="social-proof">
 
