@@ -3,34 +3,45 @@ console.log("EntrenaConSteven listo 🚀");
 const form = document.querySelector("form");
 
 if (form) {
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = form.email.value;
 
         try {
-            const formData = new FormData(form);
 
-            await fetch("/", {
+            const response = await fetch("/.netlify/functions/subscribe", {
+
                 method: "POST",
+
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "application/json",
                 },
-                body: new URLSearchParams(formData).toString(),
+
+                body: JSON.stringify({
+                    email,
+                }),
+
             });
 
-            // Descargar la guía
+            if (!response.ok) {
+                throw new Error("Error enviando a Brevo");
+            }
+
             const link = document.createElement("a");
             link.href = "/assets/pdf/guia.pdf";
             link.download = "Guia-EntrenaConSteven.pdf";
-            document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
 
-            // Redirigir
             window.location.href = "/gracias.html";
 
         } catch (error) {
-            console.error("Error enviando el formulario:", error);
-            alert("Ocurrió un error. Inténtalo nuevamente.");
+
+            console.error(error);
+
+            alert("Hubo un error. Inténtalo nuevamente.");
+
         }
+
     });
 }

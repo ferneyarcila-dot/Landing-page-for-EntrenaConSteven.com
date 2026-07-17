@@ -1,15 +1,40 @@
 exports.handler = async (event) => {
+    if (event.httpMethod !== "POST") {
+        return {
+            statusCode: 405,
+            body: "Method Not Allowed",
+        };
+    }
 
-    return {
+    try {
+        const { email } = JSON.parse(event.body);
 
-        statusCode: 200,
+        const response = await fetch("https://api.brevo.com/v3/contacts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "api-key": process.env.BREVO_API_KEY,
+            },
+            body: JSON.stringify({
+                email,
+                listIds: [2],
+                updateEnabled: true,
+            }),
+        });
 
-        body: JSON.stringify({
+        const data = await response.json();
 
-            message: "La función funciona correctamente 🚀"
+        return {
+            statusCode: 200,
+            body: JSON.stringify(data),
+        };
 
-        })
-
-    };
-
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                error: error.message,
+            }),
+        };
+    }
 };
